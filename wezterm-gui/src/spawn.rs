@@ -68,8 +68,12 @@ pub async fn spawn_command_internal(
         None
     };
 
-    let cmd_builder = if let Some(args) = spawn.args {
-        let mut builder = CommandBuilder::from_argv(args.iter().map(Into::into).collect());
+    let cmd_builder = {
+        let mut builder = if let Some(args) = spawn.args {
+            CommandBuilder::from_argv(args.iter().map(Into::into).collect())
+        } else {
+            CommandBuilder::new_default_prog()
+        };
         for (k, v) in spawn.set_environment_variables.iter() {
             builder.env(k, v);
         }
@@ -77,8 +81,6 @@ pub async fn spawn_command_internal(
             builder.cwd(cwd);
         }
         Some(builder)
-    } else {
-        None
     };
 
     let workspace = mux.active_workspace().clone();
