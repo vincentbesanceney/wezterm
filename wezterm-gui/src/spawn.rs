@@ -71,9 +71,9 @@ pub async fn spawn_command_internal(
     let cmd_builder = match (
         spawn.args.as_ref(),
         spawn.cwd.as_ref(),
-        !spawn.set_environment_variables.is_empty(),
+        spawn.set_environment_variables.is_empty(),
     ) {
-        (None, None, false) => None,
+        (None, None, true) => None,
         _ => {
             let mut builder = spawn
                 .args
