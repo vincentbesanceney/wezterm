@@ -1,7 +1,6 @@
 use anyhow::{anyhow, bail, Context};
-use config::configuration;
 use config::keyassignment::SpawnCommand;
-use config::TermConfig;
+use config::{configuration, TermConfig};
 use mux::activity::Activity;
 use mux::domain::SplitSource;
 use mux::tab::SplitRequest;
