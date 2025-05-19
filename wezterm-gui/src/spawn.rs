@@ -1,4 +1,5 @@
 use anyhow::{anyhow, bail, Context};
+use config::configuration;
 use config::keyassignment::SpawnCommand;
 use config::TermConfig;
 use mux::activity::Activity;
@@ -75,11 +76,13 @@ pub async fn spawn_command_internal(
     ) {
         (None, None, true) => None,
         _ => {
+            let config = configuration();
+            let default_builder = config.build_prog(None, config.default_prog.as_ref(), None)?;
             let mut builder = spawn
                 .args
                 .as_ref()
                 .map(|args| CommandBuilder::from_argv(args.iter().map(Into::into).collect()))
-                .unwrap_or_else(CommandBuilder::new_default_prog);
+                .unwrap_or(default_builder);
             for (k, v) in spawn.set_environment_variables.iter() {
                 builder.env(k, v);
             }
